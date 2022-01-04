@@ -53,6 +53,9 @@ public class EnemyBulletSpawner : MonoBehaviour
             return;
         }
 
+        GameManager.Instance.UpdateScore(Swarm.Instance.GetPoints(followTarget.gameObject.name));
+        Swarm.Instance.IncreaseDeathCount();
+
         followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
         currentRow = currentRow - 1;
         if (currentRow < 0)
@@ -64,6 +67,7 @@ public class EnemyBulletSpawner : MonoBehaviour
             Setup();
         }
 
-        Destroy(other.gameObject);
+        if (other.gameObject.tag == "Bullet")
+            Destroy(other.gameObject);
     }
 }

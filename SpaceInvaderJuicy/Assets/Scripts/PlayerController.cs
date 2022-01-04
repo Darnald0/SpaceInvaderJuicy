@@ -16,10 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float respawnTime = 2f;
 
-    [SerializeField]
     private SpriteRenderer sprite;
 
-    [SerializeField]
     private Collider2D col;
 
     private Vector2 startPos;

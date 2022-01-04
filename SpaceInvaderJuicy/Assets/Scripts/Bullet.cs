@@ -22,9 +22,9 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         var otherTag = other.gameObject.tag;
-        if (otherTag == "Ceiling" || otherTag == "Shield" || otherTag == "Bullet")
+        if (otherTag == "Enemy" || otherTag == "Ceiling" || otherTag == "Shield" || otherTag == "Bullet")
         {
-            if ( otherTag == "Bullet")
+            if (otherTag == "Bullet")
             {
                 Destroy(other.gameObject);
             }

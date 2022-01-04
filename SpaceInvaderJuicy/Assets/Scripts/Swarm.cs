@@ -36,6 +36,9 @@ public class Swarm : MonoBehaviour
 
     private float minX;
 
+    private int killCount;
+    private System.Collections.Generic.Dictionary<string, int> pointsMap;
+
 
     [Space]
     [Header("Movement")]
@@ -54,6 +57,11 @@ public class Swarm : MonoBehaviour
     [SerializeField]
     private float minMovementFrequency = 0.1f;
 
+    [SerializeField]
+    private Transform playerPos;
+
+    private float minY;
+    private float currentY;
     private Transform[,] invadersClassification;
     private int rowCount;
     private bool isMovingRight = true;
@@ -78,6 +86,8 @@ public class Swarm : MonoBehaviour
             Destroy(gameObject);
         }
 
+        currentY = spawnStartPoint.position.y;
+        minY = playerPos.position.y;
 
         minX = spawnStartPoint.position.x;
 
@@ -92,10 +102,15 @@ public class Swarm : MonoBehaviour
         currentX = minX;
         invadersClassification = new Transform[rowCount, columnCount];
 
+        pointsMap = new System.Collections.Generic.Dictionary<string, int>();
+
         int rowIndex = 0;
         foreach (var invaderType in invaderTypes)
         {
             var invaderName = invaderType.name.Trim();
+
+            pointsMap[invaderName] = invaderType.points;
+
             for (int i = 0, len = invaderType.rowCount; i < len; i++)
             {
                 for (int j = 0; j < columnCount; j++)
@@ -200,6 +215,12 @@ public class Swarm : MonoBehaviour
     {
         isMovingRight = !isMovingRight;
         MoveInvaders(0, -ySpacing);
+
+        currentY -= ySpacing;
+        if (currentY < minY)
+        {
+            GameManager.Instance.TriggerGameOver();
+        }
     }
 
     public Transform GetInvader(int row, int column)
@@ -210,6 +231,25 @@ public class Swarm : MonoBehaviour
             return null;
         }
         return invadersClassification[row, column];
+    }
+
+    public void IncreaseDeathCount()
+    {
+        killCount++;
+        if (killCount >= invadersClassification.Length)
+        {
+            GameManager.Instance.TriggerGameOver(false);
+            return;
+        }
+    }
+
+    public int GetPoints(string alienName)
+    {
+        if (pointsMap.ContainsKey(alienName))
+        {
+            return pointsMap[alienName];
+        }
+        return 0;
     }
 
 }
