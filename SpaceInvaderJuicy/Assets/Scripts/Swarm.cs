@@ -42,12 +42,26 @@ public class Swarm : MonoBehaviour
     [SerializeField]
     private float speedFactor = 10f;
 
+    [SerializeField]
+    private float acceleration = 0.5f;
+
+    [SerializeField]
+    private float accelerationFrequency = 10f;
+
+    [SerializeField]
+    private float movementFrequency = 5f;
+
+    [SerializeField]
+    private float minMovementFrequency = 0.1f;
+
     private Transform[,] invadersClassification;
     private int rowCount;
     private bool isMovingRight = true;
     private float maxX;
     private float currentX;
     private float xIncrement;
+    private float accelerationTimer;
+    private float movementTimer;
 
     [SerializeField]
     private EnemyBulletSpawner bulletSpawnerPrefab;
@@ -114,35 +128,60 @@ public class Swarm : MonoBehaviour
             bulletSpawner.currentRow = rowCount - 1;
             bulletSpawner.Setup();
         }
+
+        xIncrement = speedFactor;
+        accelerationTimer = accelerationFrequency;
+        movementTimer = movementFrequency;
     }
 
     // Update is called once per frame
     void Update()
     {
-        xIncrement = speedFactor * Time.deltaTime;
-        if (isMovingRight)
+        //xIncrement = speedFactor * Time.deltaTime;
+        accelerationTimer -= Time.deltaTime;
+        if (accelerationTimer <= 0)
         {
-            currentX += xIncrement;
-            if (currentX < maxX)
+            if (movementFrequency >= minMovementFrequency)
             {
-                MoveInvaders(xIncrement, 0);
+                movementFrequency -= acceleration;
+                accelerationTimer = accelerationFrequency;
             }
-            else
+
+            if (movementFrequency <= minMovementFrequency)
             {
-                ChangeDirection();
+                movementFrequency = minMovementFrequency;
             }
         }
-        else
+
+        movementTimer -= Time.deltaTime;
+        if (movementTimer <= 0)
         {
-            currentX -= xIncrement;
-            if (currentX > minX)
+            if (isMovingRight)
             {
-                MoveInvaders(-xIncrement, 0);
+                currentX += xIncrement;
+                if (currentX < maxX)
+                {
+                    MoveInvaders(xIncrement, 0);
+                }
+                else
+                {
+                    ChangeDirection();
+                }
             }
             else
             {
-                ChangeDirection();
+                currentX -= xIncrement;
+                if (currentX > minX)
+                {
+                    MoveInvaders(-xIncrement, 0);
+                }
+                else
+                {
+                    ChangeDirection();
+                }
             }
+
+            movementTimer = movementFrequency;
         }
     }
 
