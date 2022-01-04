@@ -24,7 +24,7 @@ public class EnemyBullet : MonoBehaviour
         var otherTag = other.gameObject.tag;
         if (otherTag == "Player" || otherTag == "Ground" || otherTag == "Shield" || otherTag == "Bullet")
         {
-            if (otherTag == "Player" || otherTag == "Bullet")
+            if (otherTag == "Bullet")
             {
                 Destroy(other.gameObject);
             }

@@ -13,11 +13,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject bulletPrefab;
 
+    [SerializeField]
+    private float respawnTime = 2f;
+
+    [SerializeField]
+    private SpriteRenderer sprite;
+
+    [SerializeField]
+    private Collider2D col;
+
+    private Vector2 startPos;
+
     private GameObject currentBullet;
     // Start is called before the first frame update
     void Start()
     {
-        
+        sprite = GetComponent<SpriteRenderer>();
+        col = GetComponent<BoxCollider2D>();
+        startPos = transform.position;
     }
 
     // Update is called once per frame
@@ -37,5 +50,36 @@ public class PlayerController : MonoBehaviour
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
             currentBullet = instantiateBullet;
         }
+    }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        GameManager.Instance.UpdateLives();
+        StopAllCoroutines();
+        StartCoroutine(Respawn());
+    }
+
+    System.Collections.IEnumerator Respawn()
+    {
+        enabled = false;
+        col.enabled = false;
+        ChangeSpriteAlpha(0.0f);
+
+        yield return new WaitForSeconds(0.25f * respawnTime);
+
+        transform.position = startPos;
+        enabled = true;
+        ChangeSpriteAlpha(0.25f);
+
+        yield return new WaitForSeconds(0.75f * respawnTime);
+
+        ChangeSpriteAlpha(1.0f);
+        col.enabled = true;
+    }
+
+    private void ChangeSpriteAlpha(float value)
+    {
+        var color = sprite.color;
+        color.a = value;
+        sprite.color = color;
     }
 }

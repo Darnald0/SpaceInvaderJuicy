@@ -13,7 +13,7 @@ public class Swarm : MonoBehaviour
         public int rowCount;
     }
 
-    internal static Swarm Instance;
+    public static Swarm Instance;
 
     [Header("Spawning")]
     [SerializeField]
