@@ -68,6 +68,12 @@ public class EnemyBulletSpawner : MonoBehaviour
         }
 
         if (other.gameObject.tag == "Bullet")
+        {
+            if (Camera.main.GetComponent<CameraShake>())
+            {
+                Camera.main.GetComponent<CameraShake>().StartShake();
+            }
             Destroy(other.gameObject);
+        }
     }
 }
