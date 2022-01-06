@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 startPos;
 
     private GameObject currentBullet;
+
+    public float maxDistanceUp;
+    public float maxDistanceDown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +46,22 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(-speed * Time.deltaTime, 0, 0);
         }
-
+        if (Input.GetKey(KeyCode.Z))
+        {
+            transform.Translate(0, speed * Time.deltaTime * 0.7f, 0);
+            if(transform.position.y > startPos.y + maxDistanceUp)
+            {
+                transform.position = new Vector2(transform.position.x, startPos.y + maxDistanceUp);
+            }
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            transform.Translate(0, -speed * Time.deltaTime*0.7f, 0);
+            if (transform.position.y < startPos.y - maxDistanceDown)
+            {
+                transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
+            }
+        }
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
         {
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
