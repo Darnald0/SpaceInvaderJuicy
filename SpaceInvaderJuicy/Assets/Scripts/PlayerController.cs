@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public float maxDistanceUp;
     public float maxDistanceDown;
     public float maxRadiusTurn;
+    public float speedTurn;
 
     float speed;
     float speedV;
@@ -35,8 +36,6 @@ public class PlayerController : MonoBehaviour
     float secondToMaxSpeed;
     float moveHz = 0;
     float moveVrt = 0;
-
-    float MinMovement = 0.1f;
 
     private ParticleSystem bubble;
 
@@ -56,22 +55,22 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Z))
             {
-                transform.Translate(0, speed * Time.deltaTime * 0.7f, 0);
+                transform.Translate(0, maxSpeed * Time.deltaTime * 0.7f, 0);
 
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                transform.Translate(0, -speed * Time.deltaTime * 0.7f, 0);
+                transform.Translate(0, -maxSpeed * Time.deltaTime * 0.7f, 0);
 
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                transform.Translate(speed * Time.deltaTime, 0, 0);
+                transform.Translate(maxSpeed * Time.deltaTime, 0, 0);
             }
             else if (Input.GetKey(KeyCode.Q))
             {
-                transform.Translate(-speed * Time.deltaTime, 0, 0);
+                transform.Translate(-maxSpeed * Time.deltaTime, 0, 0);
             }
         }
         else
@@ -91,7 +90,7 @@ public class PlayerController : MonoBehaviour
                     speed = maxSpeed;
                 }
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.Q))
             {
                 if (speed > -maxSpeed)
                 {
@@ -103,7 +102,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.Z))
             {
                 if (speedV < maxSpeed)
                 {
@@ -167,6 +166,47 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < startPos.y - maxDistanceDown)
         {
             transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
+        }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            float turn = speedTurn * Time.deltaTime;
+            if (transform.rotation.eulerAngles.z%360 + turn > maxRadiusTurn && (transform.rotation.eulerAngles.z + turn) < 360- maxRadiusTurn)
+            {
+                turn = maxRadiusTurn - transform.rotation.eulerAngles.z;
+            }
+            this.transform.rotation = Quaternion.Euler(0,0, transform.rotation.eulerAngles.z + turn);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            float turn = -speedTurn * Time.deltaTime;
+            float temp = transform.rotation.eulerAngles.z;
+            if ((temp%360 + turn) <360 -maxRadiusTurn && (temp + turn) > maxRadiusTurn)
+            {
+                turn = -maxRadiusTurn - temp;
+            }
+            this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+        }
+        if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.S))
+        {
+            if (transform.rotation.z < 0)
+            {
+                float turn = speedTurn * Time.deltaTime;
+                if (transform.rotation.z + turn > 0)
+                {
+                    turn = -transform.rotation.z;
+                }
+                this.transform.rotation = new Quaternion(0, 0, transform.rotation.z + turn, 0);
+            }
+            else
+            {
+                float turn = -speedTurn * Time.deltaTime;
+                if (transform.rotation.z + turn < 0)
+                {
+                    turn = -transform.rotation.z;
+                }
+                this.transform.rotation = new Quaternion(0, 0, transform.rotation.z + turn, 0);
+            }
         }
 
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
