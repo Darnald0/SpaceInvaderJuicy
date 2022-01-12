@@ -5,9 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 50f;
-
-    [SerializeField]
     private Transform muzzle;
 
     [SerializeField]
@@ -26,7 +23,24 @@ public class PlayerController : MonoBehaviour
 
     public float maxDistanceUp;
     public float maxDistanceDown;
+    public float maxRadiusTurn;
 
+    float speed;
+    float speedV;
+    [SerializeField]
+    public float maxSpeed;
+    [SerializeField]
+    public float secondToDecelerate;
+    [SerializeField]
+    float secondToMaxSpeed;
+    float moveHz = 0;
+    float moveVrt = 0;
+
+    float MinMovement = 0.1f;
+
+    private ParticleSystem bubble;
+
+    public bool betterMovement;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,41 +52,138 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.D))
+        if (!betterMovement)
         {
-            transform.Translate(speed * Time.deltaTime, 0, 0);
-        }
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            transform.Translate(-speed * Time.deltaTime, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.Z))
-        {
-            transform.Translate(0, speed * Time.deltaTime * 0.7f, 0);
-            if(transform.position.y > startPos.y + maxDistanceUp)
+            if (Input.GetKey(KeyCode.Z))
             {
-                transform.position = new Vector2(transform.position.x, startPos.y + maxDistanceUp);
+                transform.Translate(0, speed * Time.deltaTime * 0.7f, 0);
+
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                transform.Translate(0, -speed * Time.deltaTime * 0.7f, 0);
+
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+            else if (Input.GetKey(KeyCode.Q))
+            {
+                transform.Translate(-speed * Time.deltaTime, 0, 0);
             }
         }
-        else if (Input.GetKey(KeyCode.S))
+        else
         {
-            transform.Translate(0, -speed * Time.deltaTime*0.7f, 0);
-            if (transform.position.y < startPos.y - maxDistanceDown)
+            moveHz = Input.GetAxis("Horizontal");
+            moveVrt = Input.GetAxis("Vertical");
+
+            #region Acceleration
+            if (Input.GetKey(KeyCode.D))
             {
-                transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
+                if (speed < maxSpeed)
+                {
+                    speed += (maxSpeed / secondToMaxSpeed) * Time.deltaTime;
+                }
+                if (speed > maxSpeed)
+                {
+                    speed = maxSpeed;
+                }
             }
+            if (Input.GetKey(KeyCode.A))
+            {
+                if (speed > -maxSpeed)
+                {
+                    speed -= (maxSpeed / secondToMaxSpeed) * Time.deltaTime;
+                }
+                if (speed < -maxSpeed)
+                {
+                    speed = -maxSpeed;
+                }
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                if (speedV < maxSpeed)
+                {
+                    speedV += (maxSpeed / secondToMaxSpeed) * Time.deltaTime;
+                }
+                if (speedV > maxSpeed)
+                {
+                    speedV = maxSpeed;
+                }
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                if (speedV > -maxSpeed)
+                {
+                    speedV -= (maxSpeed / secondToMaxSpeed) * Time.deltaTime;
+                }
+                if (speedV < -maxSpeed)
+                {
+                    speedV = -maxSpeed;
+                }
+            }
+            #endregion
+            #region Decelerate
+            if (moveHz == 0)
+            {
+                if (speed < 0)
+                {
+                    speed += (maxSpeed / secondToDecelerate) * Time.deltaTime;
+                }
+                else if (speed > 0)
+                {
+                    speed -= (maxSpeed / secondToDecelerate) * Time.deltaTime;
+                }
+                else
+                {
+                    speed = 0;
+                }
+            }
+            if (moveVrt == 0)
+            {
+                if (speedV < 0)
+                {
+                    speedV += (maxSpeed / secondToDecelerate) * Time.deltaTime;
+                }
+                else if (speedV > 0)
+                {
+                    speedV -= (maxSpeed / secondToDecelerate) * Time.deltaTime;
+                }
+                else
+                {
+                    speedV = 0;
+                }
+            }
+            #endregion
+            transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y + speedV * Time.deltaTime);
         }
+        if (transform.position.y > startPos.y + maxDistanceUp)
+        {
+            transform.position = new Vector2(transform.position.x, startPos.y + maxDistanceUp);
+        }
+        if (transform.position.y < startPos.y - maxDistanceDown)
+        {
+            transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
+        }
+
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
         {
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
             currentBullet = instantiateBullet;
         }
     }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
-        GameManager.Instance.UpdateLives();
-        StopAllCoroutines();
-        StartCoroutine(Respawn());
+        if (other.gameObject.tag == "Bullet" || other.gameObject.name == "BulletSpawner(Clone)")
+        {
+            GameManager.Instance.UpdateLives();
+            StopAllCoroutines();
+            StartCoroutine(Respawn());
+        }
     }
 
     System.Collections.IEnumerator Respawn()
