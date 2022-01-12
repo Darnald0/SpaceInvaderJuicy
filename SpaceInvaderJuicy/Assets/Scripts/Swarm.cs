@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class Swarm : MonoBehaviour
 {
+    public enum ShootType
+    {
+        Spine,
+        Bone,
+        Tooth
+    }
+
     [System.Serializable]
-    private struct InvaderType
+    public struct InvaderType
     {
         public string name;
         public Sprite[] sprites;
+        public ShootType bulletType;
         public int points;
         public int rowCount;
     }
@@ -225,14 +233,21 @@ public class Swarm : MonoBehaviour
 
     public Transform GetInvader(int row, int column)
     {
-        if (row < 0 || column < 0
-            || row >= invadersClassification.GetLength(0) || column >= invadersClassification.GetLength(1))
+        if (row < 0 || column < 0 || row >= invadersClassification.GetLength(0) || column >= invadersClassification.GetLength(1))
         {
             return null;
         }
         return invadersClassification[row, column];
     }
 
+    public GameObject GetInvaderGameObject(int row, int column)
+    {
+        if (row < 0 || column < 0 || row >= invadersClassification.GetLength(0) || column >= invadersClassification.GetLength(1))
+        {
+            return null;
+        }
+        return invadersClassification[row, column].gameObject;
+    }
     public void IncreaseDeathCount()
     {
         killCount++;

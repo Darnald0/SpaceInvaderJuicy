@@ -8,6 +8,9 @@ public class EnemyBulletSpawner : MonoBehaviour
     internal int column;
 
     [SerializeField]
+    private GameObject currentSwarm;
+
+    [SerializeField]
     private GameObject bulletPrefab;
 
     [SerializeField]
@@ -19,12 +22,16 @@ public class EnemyBulletSpawner : MonoBehaviour
     [SerializeField]
     private float maxShootCD = 10;
 
+    [SerializeField]
+    private GameObject[] bulletType;
+
     private float timer;
     private float currentTime;
     [SerializeField] private Transform followTarget;
     public void Setup()
     {
         currentTime = Random.Range(minShootCD, maxShootCD);
+        currentSwarm = Swarm.Instance.GetInvaderGameObject(currentRow, column);
         followTarget = Swarm.Instance.GetInvader(currentRow, column);
     }
 
@@ -41,7 +48,22 @@ public class EnemyBulletSpawner : MonoBehaviour
             return;
         }
 
-        Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity);
+        switch (currentSwarm.name)
+        {
+            case "Fugu":
+                Instantiate(bulletType[0], spawnPoint.position, Quaternion.identity);
+                break;
+            case "Shark":
+                Instantiate(bulletType[1], spawnPoint.position, Quaternion.identity);
+                break;
+            case "Lantern":
+                Instantiate(bulletType[2], spawnPoint.position, Quaternion.identity);
+                break;
+            default:
+                Debug.Log("Error shoot");
+                break;
+        }
+
         timer = 0f;
         currentTime = Random.Range(minShootCD, maxShootCD);
     }
