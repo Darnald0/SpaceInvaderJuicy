@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class Swarm : MonoBehaviour
 {
-    public enum ShootType
-    {
-        Spine,
-        Bone,
-        Tooth
-    }
 
     [System.Serializable]
     public struct InvaderType
     {
         public string name;
         public Sprite[] sprites;
-        public ShootType bulletType;
         public int points;
         public int rowCount;
     }
