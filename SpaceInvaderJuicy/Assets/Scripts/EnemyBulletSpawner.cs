@@ -108,7 +108,7 @@ public class EnemyBulletSpawner : MonoBehaviour
             c.a = i;
             renderer.color = c;
 
-            invader.transform.localScale -= new Vector3(i,i,0);
+            //invader.transform.localScale -= new Vector3(i,i,0);
 
             if (Swarm.Instance.isMovingRight)
             {

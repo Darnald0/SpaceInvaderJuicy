@@ -71,6 +71,8 @@ public class Swarm : MonoBehaviour
     private float maxX;
     private float currentX;
     private float xIncrement;
+    [SerializeField]
+    private float maxXIncrementation;
     private float accelerationTimer;
     private float movementTimer;
 
@@ -101,7 +103,10 @@ public class Swarm : MonoBehaviour
         {
             rowCount += invaderType.rowCount;
         }
-        maxX = minX + 2f * xSpacing * columnCount;
+
+        //maxX = minX + 2f * xSpacing * columnCount;
+        maxX = minX + maxXIncrementation;
+
         currentX = minX;
         invadersClassification = new Transform[rowCount, columnCount];
 

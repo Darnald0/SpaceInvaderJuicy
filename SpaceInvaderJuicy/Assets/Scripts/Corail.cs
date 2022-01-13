@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Corail : MonoBehaviour
 {
+    public int hp;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,30 @@ public class Corail : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        Debug.Log("corail hit");
+        if (other.gameObject.tag == "Bullet")
+        {
+            hp--;
+
+                GetComponent<SpriteRenderer>().color = Color.red;
+                StartCoroutine(whitecolor());
+            
+
+            if (hp <= 0)
+            {
+                this.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    IEnumerator whitecolor()
+    {
+        yield return new WaitForSeconds(0.5f);
+        GetComponent<SpriteRenderer>().color = Color.white;
+
     }
 }
