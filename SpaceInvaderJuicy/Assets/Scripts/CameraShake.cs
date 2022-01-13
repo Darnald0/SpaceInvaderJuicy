@@ -19,6 +19,11 @@ public class CameraShake : MonoBehaviour
     {
         StartCoroutine(Shake());
     }
+    
+    public void StopShake()
+    {
+        StopAllCoroutines();
+    }
 
     private IEnumerator Shake()
     {

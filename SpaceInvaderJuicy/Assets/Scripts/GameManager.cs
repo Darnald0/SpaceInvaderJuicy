@@ -80,6 +80,10 @@ public class GameManager : MonoBehaviour
 
     public void TriggerGameOver(bool failure = true)
     {
+        if (Camera.main.GetComponent<CameraShake>())
+        {
+            Camera.main.GetComponent<CameraShake>().StopShake();
+        }
         gameOver.SetActive(failure);
         allClear.SetActive(!failure);
         restartButton.gameObject.SetActive(true);

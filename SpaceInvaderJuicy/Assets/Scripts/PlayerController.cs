@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     float moveVrt = 0;
 
     private ParticleSystem bubble;
-
+    private Animator anim;
     public bool betterMovement;
     // Start is called before the first frame update
     void Start()
@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         col = GetComponent<BoxCollider2D>();
         startPos = transform.position;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -211,6 +212,7 @@ public class PlayerController : MonoBehaviour
         #endregion
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
         {
+            anim.SetTrigger("Shooting");
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
             currentBullet = instantiateBullet;
         }
@@ -220,6 +222,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet" || other.gameObject.name == "BulletSpawner(Clone)")
         {
+            if (Camera.main.GetComponent<CameraShake>())
+            {
+                Camera.main.GetComponent<CameraShake>().StartShake();
+            }
             GameManager.Instance.UpdateLives();
             StopAllCoroutines();
             StartCoroutine(Respawn());
