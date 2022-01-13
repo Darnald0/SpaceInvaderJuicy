@@ -71,7 +71,7 @@ public class EnemyBulletSpawner : MonoBehaviour
 
         //followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
         StartCoroutine(OnDeath(followTarget.gameObject));
-
+        Swarm.Instance.currentNumberOfInvader--;
         currentRow = currentRow - 1;
         if (currentRow < 0)
         {
