@@ -9,6 +9,9 @@ TagManager:
   - Enemy
   - Bullet
   - Ceiling
+  - Fugu
+  - Shark
+  - Lantern
   layers:
   - Default
   - TransparentFX

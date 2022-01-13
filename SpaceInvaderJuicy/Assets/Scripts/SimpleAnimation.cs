@@ -13,10 +13,4 @@ public class SimpleAnimation : MonoBehaviour
         spriteRenderer = this.gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprites[0];
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

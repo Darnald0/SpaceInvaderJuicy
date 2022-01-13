@@ -8,9 +8,6 @@ public class EnemyBulletSpawner : MonoBehaviour
     internal int column;
 
     [SerializeField]
-    private GameObject currentSwarm;
-
-    [SerializeField]
     private GameObject bulletPrefab;
 
     [SerializeField]
@@ -28,12 +25,6 @@ public class EnemyBulletSpawner : MonoBehaviour
     private float timer;
     private float currentTime;
     [SerializeField] private Transform followTarget;
-    public void Setup()
-    {
-        currentTime = Random.Range(minShootCD, maxShootCD);
-        currentSwarm = Swarm.Instance.GetInvaderGameObject(currentRow, column);
-        followTarget = Swarm.Instance.GetInvader(currentRow, column);
-    }
 
     public void Update()
     {
@@ -48,19 +39,19 @@ public class EnemyBulletSpawner : MonoBehaviour
             return;
         }
 
-        switch (currentSwarm.name)
+        switch (followTarget.gameObject.name)
         {
-            case "Fugu":
+            case "Fugu(Clone)":
                 Instantiate(bulletType[0], spawnPoint.position, Quaternion.identity);
                 break;
-            case "Shark":
+            case "Shark(Clone)":
                 Instantiate(bulletType[1], spawnPoint.position, Quaternion.identity);
                 break;
-            case "Lantern":
+            case "Lantern(Clone)":
                 Instantiate(bulletType[2], spawnPoint.position, Quaternion.identity);
                 break;
             default:
-                Debug.Log("Error shoot");
+                Debug.Log(followTarget.gameObject.name);
                 break;
         }
 
@@ -78,7 +69,9 @@ public class EnemyBulletSpawner : MonoBehaviour
         GameManager.Instance.UpdateScore(Swarm.Instance.GetPoints(followTarget.gameObject.name));
         Swarm.Instance.IncreaseDeathCount();
 
-        followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        //followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        StartCoroutine(OnDeath(followTarget.gameObject));
+
         currentRow = currentRow - 1;
         if (currentRow < 0)
         {
@@ -97,5 +90,37 @@ public class EnemyBulletSpawner : MonoBehaviour
             }
             Destroy(other.gameObject);
         }
+    }
+
+    public void Setup()
+    {
+        currentTime = Random.Range(minShootCD, maxShootCD);
+        followTarget = Swarm.Instance.GetInvader(currentRow, column);
+    }
+
+    IEnumerator OnDeath(GameObject invader)
+    {
+        var renderer = invader.GetComponent<SpriteRenderer>();
+        Color color = renderer.color;
+        for (float i = 1.0f; i >= -0.05f ; i-= 0.05f)
+        {
+            Color c = renderer.color;
+            c.a = i;
+            renderer.color = c;
+
+            invader.transform.localScale -= new Vector3(i,i,0);
+
+            if (Swarm.Instance.isMovingRight)
+            {
+                invader.transform.position += new Vector3(i,0,0);
+            } else
+            {
+                invader.transform.position -= new Vector3(i, 0, 0);
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        invader.SetActive(false);
+        yield return null;
     }
 }

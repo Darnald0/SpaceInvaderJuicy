@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class Swarm : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class Swarm : MonoBehaviour
     public struct InvaderType
     {
         public string name;
-        public Sprite[] sprites;
+        //public Sprite[] sprites;
+        public GameObject invaderPref;
         public int points;
         public int rowCount;
     }
@@ -65,7 +67,7 @@ public class Swarm : MonoBehaviour
     private float currentY;
     private Transform[,] invadersClassification;
     private int rowCount;
-    private bool isMovingRight = true;
+    [HideInInspector]  public bool isMovingRight = true;
     private float maxX;
     private float currentX;
     private float xIncrement;
@@ -116,8 +118,21 @@ public class Swarm : MonoBehaviour
             {
                 for (int j = 0; j < columnCount; j++)
                 {
-                    GameObject invader = new GameObject() { name = invaderName };
-                    invader.AddComponent<SimpleAnimation>().sprites = invaderType.sprites;
+                    GameObject invader = Instantiate(invaderType.invaderPref);
+                    //GameObject invader = new GameObject() { name = invaderName };
+                    //invader.AddComponent<SimpleAnimation>().sprites = invaderType.sprites;
+                    //var shadowCaster = invader.AddComponent<ShadowCaster2D>();
+                    //shadowCaster.useRendererSilhouette = false;
+                    //shadowCaster.castsShadows = false;
+
+                    //GameObject lightChild = new GameObject("PointLight2D");
+                    //var light = lightChild.AddComponent<Light2D>();
+                    //light.lightType = (Light2D.LightType)LightType.Point;
+                    //light.alphaBlendOnOverlap = false;
+
+                    //lightChild.transform.SetParent(invader.transform);
+
+
                     invader.transform.position = currentPos;
                     invader.transform.SetParent(swarm.transform);
                     invader.tag = "Enemy";
@@ -232,15 +247,6 @@ public class Swarm : MonoBehaviour
         }
         return invadersClassification[row, column];
     }
-
-    public GameObject GetInvaderGameObject(int row, int column)
-    {
-        if (row < 0 || column < 0 || row >= invadersClassification.GetLength(0) || column >= invadersClassification.GetLength(1))
-        {
-            return null;
-        }
-        return invadersClassification[row, column].gameObject;
-    }
     public void IncreaseDeathCount()
     {
         killCount++;
@@ -259,5 +265,21 @@ public class Swarm : MonoBehaviour
         }
         return 0;
     }
+
+    //public void AnimationOnDeath(GameObject invader)
+    //{
+    //    var invaderSpriteRenderer = invader.GetComponent<SpriteRenderer>();
+    //    var invaderAlpha = invaderSpriteRenderer.color.a;
+    //    for (float i = 1; invaderAlpha > 0; i = i - 0.1f )
+    //    {
+    //        var color = new Color(invaderSpriteRenderer.color.r, invaderSpriteRenderer.color.g, invaderSpriteRenderer.color.b, i);
+    //        invaderSpriteRenderer.color = color;
+    //    }
+
+    //    if (invaderAlpha <= 0)
+    //    {
+    //        invaderSpriteRenderer.enabled = false;
+    //    }
+    //}
 
 }
