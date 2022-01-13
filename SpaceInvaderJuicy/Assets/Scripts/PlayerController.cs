@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
         }
-
+        #region Rotate
         if (Input.GetKey(KeyCode.Q))
         {
             float turn = speedTurn * Time.deltaTime;
@@ -189,26 +189,26 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.S))
         {
-            if (transform.rotation.z < 0)
+            if (transform.rotation.eulerAngles.z >= 360 - maxRadiusTurn && transform.rotation.eulerAngles.z>maxRadiusTurn)
             {
                 float turn = speedTurn * Time.deltaTime;
-                if (transform.rotation.z + turn > 0)
+                if (transform.rotation.eulerAngles.z + turn > 0 && transform.rotation.eulerAngles.z < 350 - maxRadiusTurn)
                 {
                     turn = -transform.rotation.z;
                 }
-                this.transform.rotation = new Quaternion(0, 0, transform.rotation.z + turn, 0);
+                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
             }
             else
             {
                 float turn = -speedTurn * Time.deltaTime;
-                if (transform.rotation.z + turn < 0)
+                if (transform.rotation.eulerAngles.z % 360 + turn < 0)
                 {
                     turn = -transform.rotation.z;
                 }
-                this.transform.rotation = new Quaternion(0, 0, transform.rotation.z + turn, 0);
+                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
             }
         }
-
+        #endregion
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
         {
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
