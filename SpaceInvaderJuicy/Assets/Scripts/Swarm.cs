@@ -79,6 +79,7 @@ public class Swarm : MonoBehaviour
     [SerializeField]
     private EnemyBulletSpawner bulletSpawnerPrefab;
 
+    [HideInInspector] public int numberOfInvader;
     // Start is called before the first frame update
     void Start()
     {
@@ -147,6 +148,7 @@ public class Swarm : MonoBehaviour
                     currentPos.x += xSpacing;
 
                     invader.transform.localScale = invaderScale;
+                    numberOfInvader++;
                 }
 
                 currentPos.x = minX;
