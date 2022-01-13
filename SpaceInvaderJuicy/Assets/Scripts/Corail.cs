@@ -20,7 +20,6 @@ public class Corail : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("corail hit");
         if (other.gameObject.tag == "Bullet")
         {
             hp--;
@@ -34,6 +33,7 @@ public class Corail : MonoBehaviour
                 this.gameObject.SetActive(false);
             }
         }
+        Destroy(other.gameObject);
     }
 
     IEnumerator whitecolor()
