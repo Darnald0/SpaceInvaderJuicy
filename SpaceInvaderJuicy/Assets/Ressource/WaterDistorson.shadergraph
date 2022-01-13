@@ -14,6 +14,9 @@
         },
         {
             "m_Id": "4a2038e9bb38403e86304479bf75271b"
+        },
+        {
+            "m_Id": "1decb61c08fd4e61a0e767de4fd39c63"
         }
     ],
     "m_Keywords": [],
@@ -71,6 +74,9 @@
         },
         {
             "m_Id": "9992853da392405bbcca3b7c38cb294f"
+        },
+        {
+            "m_Id": "ec013231773842ca96bc773e3ddce899"
         }
     ],
     "m_GroupDatas": [],
@@ -559,6 +565,29 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "1decb61c08fd4e61a0e767de4fd39c63",
+    "m_Guid": {
+        "m_GuidSerialized": "9c9bd86f-72f0-42be-95be-0d11ac3086e4"
+    },
+    "m_Name": "GrabPass",
+    "m_DefaultReferenceName": "Texture2D_1decb61c08fd4e61a0e767de4fd39c63",
+    "m_OverrideReferenceName": "_CameraOpaqueTexture",
+    "m_GeneratePropertyBlock": true,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_Guid": ""
+    },
+    "m_Modifiable": true,
+    "m_DefaultType": 0
 }
 
 {
@@ -1319,10 +1348,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1235.9998779296875,
-            "y": -483.9999694824219,
-            "width": 137.99998474121095,
-            "height": 76.99999237060547
+            "x": 1223.0,
+            "y": -468.0000305175781,
+            "width": 138.0,
+            "height": 77.00000762939453
         }
     },
     "m_Slots": [
@@ -1732,6 +1761,31 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "c49c4c7cc0cf4a72a928c356f7630ca8",
+    "m_Id": 0,
+    "m_DisplayName": "Out",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "c514c2980ab84da1bf271cf2cae3745b",
     "m_Id": 1,
@@ -2124,6 +2178,47 @@
     "m_PreviewMode": 0,
     "m_CustomColors": {
         "m_SerializableColors": []
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.ColorNode",
+    "m_ObjectId": "ec013231773842ca96bc773e3ddce899",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Color",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 1215.0,
+            "y": -295.0,
+            "width": 208.0,
+            "height": 127.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "c49c4c7cc0cf4a72a928c356f7630ca8"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Color": {
+        "color": {
+            "r": 1.0,
+            "g": 0.8228265047073364,
+            "b": 0.0,
+            "a": 0.0
+        },
+        "mode": 0
     }
 }
 
