@@ -129,7 +129,7 @@ MonoBehaviour:
   m_LightType: 2
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.6017804, b: 1, a: 1}
   m_Intensity: 40
   m_LightVolumeOpacity: 1
   m_ApplyToSortingLayers: 00000000
@@ -181,7 +181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6645534724841061948}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 94.9, y: 3.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 0}
   m_Children:
   - {fileID: 6645534725049323927}
@@ -278,7 +278,7 @@ MonoBehaviour:
   - {x: -0.60965645, y: 0.1983478, z: 0}
   m_ShapePathHash: 521102504
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1318
+  m_InstanceId: 29452
 --- !u!1 &6645534725049323921
 GameObject:
   m_ObjectHideFlags: 0
