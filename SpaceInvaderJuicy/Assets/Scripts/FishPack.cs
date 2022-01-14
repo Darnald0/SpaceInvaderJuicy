@@ -45,7 +45,11 @@ public class FishPack : MonoBehaviour
         }
 
         Vector3 border = new Vector3(Mathf.Clamp(transform.position.x, minX, maxX), Mathf.Clamp(transform.position.y, minY, maxY), 0);
-        transform.position = border;
+        if (border.x <= transform.position.x && border.x >= transform.position.x && border.y <= transform.position.y && border.y >= transform.position.y)
+        {
+            transform.position = border;
+
+        }
 
         Vector3 currentPos = transform.position;
 

@@ -40,6 +40,13 @@ public class PlayerController : MonoBehaviour
     private ParticleSystem bubble;
     private Animator anim;
     public bool betterMovement;
+    public bool activateAnim;
+    public bool activateSFX;
+    public bool activeParticle;
+    public bool activeShake;
+
+    private AudioSource sourceSFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +54,8 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
         startPos = transform.position;
         anim = GetComponent<Animator>();
+        sourceSFX = GetComponent<AudioSource>();
+        GetComponentInChildren<ParticleSystem>().Stop();
     }
 
     // Update is called once per frame
@@ -159,6 +168,49 @@ public class PlayerController : MonoBehaviour
             }
             #endregion
             transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y + speedV * Time.deltaTime);
+
+            #region Rotate
+            if (Input.GetKey(KeyCode.Q))
+            {
+                float turn = speedTurn * Time.deltaTime;
+                if (transform.rotation.eulerAngles.z % 360 + turn > maxRadiusTurn && (transform.rotation.eulerAngles.z + turn) < 360 - maxRadiusTurn)
+                {
+                    turn = maxRadiusTurn - transform.rotation.eulerAngles.z;
+                }
+                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                float turn = -speedTurn * Time.deltaTime;
+                float temp = transform.rotation.eulerAngles.z;
+                if ((temp % 360 + turn) < 360 - maxRadiusTurn && (temp + turn) > maxRadiusTurn)
+                {
+                    turn = -maxRadiusTurn - temp;
+                }
+                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+            }
+            if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.S))
+            {
+                if (transform.rotation.eulerAngles.z >= 360 - maxRadiusTurn && transform.rotation.eulerAngles.z > maxRadiusTurn)
+                {
+                    float turn = speedTurn * Time.deltaTime;
+                    if (transform.rotation.eulerAngles.z + turn > 0 && transform.rotation.eulerAngles.z < 350 - maxRadiusTurn)
+                    {
+                        turn = -transform.rotation.z;
+                    }
+                    this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+                }
+                else
+                {
+                    float turn = -speedTurn * Time.deltaTime;
+                    if (transform.rotation.eulerAngles.z % 360 + turn < 0)
+                    {
+                        turn = -transform.rotation.z;
+                    }
+                    this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+                }
+            }
+            #endregion
         }
         if (transform.position.y > startPos.y + maxDistanceUp)
         {
@@ -168,53 +220,30 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector2(transform.position.x, startPos.y - maxDistanceDown);
         }
-        #region Rotate
-        if (Input.GetKey(KeyCode.Q))
+
+
+        if (activateAnim)
         {
-            float turn = speedTurn * Time.deltaTime;
-            if (transform.rotation.eulerAngles.z%360 + turn > maxRadiusTurn && (transform.rotation.eulerAngles.z + turn) < 360- maxRadiusTurn)
-            {
-                turn = maxRadiusTurn - transform.rotation.eulerAngles.z;
-            }
-            this.transform.rotation = Quaternion.Euler(0,0, transform.rotation.eulerAngles.z + turn);
+            anim.SetBool("StartAnim", true);
         }
-        if (Input.GetKey(KeyCode.D))
+        else
         {
-            float turn = -speedTurn * Time.deltaTime;
-            float temp = transform.rotation.eulerAngles.z;
-            if ((temp%360 + turn) <360 -maxRadiusTurn && (temp + turn) > maxRadiusTurn)
-            {
-                turn = -maxRadiusTurn - temp;
-            }
-            this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
+            anim.SetBool("StartAnim", false);
         }
-        if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.S))
-        {
-            if (transform.rotation.eulerAngles.z >= 360 - maxRadiusTurn && transform.rotation.eulerAngles.z>maxRadiusTurn)
-            {
-                float turn = speedTurn * Time.deltaTime;
-                if (transform.rotation.eulerAngles.z + turn > 0 && transform.rotation.eulerAngles.z < 350 - maxRadiusTurn)
-                {
-                    turn = -transform.rotation.z;
-                }
-                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
-            }
-            else
-            {
-                float turn = -speedTurn * Time.deltaTime;
-                if (transform.rotation.eulerAngles.z % 360 + turn < 0)
-                {
-                    turn = -transform.rotation.z;
-                }
-                this.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z + turn);
-            }
-        }
-        #endregion
+
         if (currentBullet == null && Input.GetKey(KeyCode.Space))
         {
-            anim.SetTrigger("Shooting");
+            if (sourceSFX && activateSFX)
+            {
+                sourceSFX.Play();
+            }
+            if (activateAnim)
+            {
+                anim.SetTrigger("Shooting");
+            }
             GameObject instantiateBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
             currentBullet = instantiateBullet;
+            currentBullet.GetComponent<Bullet>().player = this;
         }
     }
 
@@ -222,7 +251,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet" || other.gameObject.name == "BulletSpawner(Clone)")
         {
-            if (Camera.main.GetComponent<CameraShake>())
+            if (Camera.main.GetComponent<CameraShake>() && activeShake)
             {
                 Camera.main.GetComponent<CameraShake>().StartShake();
             }
