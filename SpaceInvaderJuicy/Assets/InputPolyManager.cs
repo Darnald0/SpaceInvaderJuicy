@@ -8,6 +8,8 @@ public class InputPolyManager : MonoBehaviour
     public GameObject ambientSFX;
     public EnemyBulletSpawner[] enemy;
     public GameObject camera;
+    public Camera camera1;
+    public Camera camera2;
 
     private bool movementActive;
     private bool animActive;
@@ -136,11 +138,15 @@ public class InputPolyManager : MonoBehaviour
             {
                 lightActive = true;
                 camera.SetActive(true);
+                camera1.gameObject.SetActive(true);
+                camera2.gameObject.SetActive(false);
             }
             else
             {
                 lightActive = false;
                 camera.SetActive(false);
+                camera1.gameObject.SetActive(false);
+                camera2.gameObject.SetActive(true);
             }
         }
     }
