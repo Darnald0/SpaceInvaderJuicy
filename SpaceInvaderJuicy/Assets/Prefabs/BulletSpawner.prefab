@@ -76,11 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3bd7a0c9dfa6a946965e0006fd1f7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSwarm: {fileID: 0}
   bulletPrefab: {fileID: 4324774587303595428, guid: 6793ec06cf8202a4d84d9eb3086c9881, type: 3}
   spawnPoint: {fileID: 7316664282788808529}
-  minShootCD: 1
-  maxShootCD: 10
+  minShootCD: 5
+  maxShootCD: 20
   bulletType:
   - {fileID: 924387337331029297, guid: c39e2714d945c734d9b0b8f87d143b57, type: 3}
   - {fileID: 3950021872625720090, guid: 1f1b7082e88363447a5afb572aac0f55, type: 3}
