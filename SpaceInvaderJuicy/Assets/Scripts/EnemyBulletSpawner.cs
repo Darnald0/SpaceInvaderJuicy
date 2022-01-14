@@ -28,6 +28,7 @@ public class EnemyBulletSpawner : MonoBehaviour
 
     private AudioSource sourceSFX;
     public bool activateSFX;
+    public bool activateAnim;
 
     private void Start()
     {
@@ -109,26 +110,29 @@ public class EnemyBulletSpawner : MonoBehaviour
 
     IEnumerator OnDeath(GameObject invader)
     {
-        var renderer = invader.GetComponent<SpriteRenderer>();
-        Color color = renderer.color;
-        for (float i = 1.0f; i >= -0.05f ; i-= 0.05f)
+        if (activateAnim)
         {
-            Color c = renderer.color;
-            c.a = i;
-            renderer.color = c;
-
-            //invader.transform.localScale -= new Vector3(i,i,0);
-
-            if (Swarm.Instance.isMovingRight)
+            var renderer = invader.GetComponent<SpriteRenderer>();
+            Color color = renderer.color;
+            for (float i = 1.0f; i >= -0.05f; i -= 0.05f)
             {
-                invader.transform.position += new Vector3(i,0,0);
-            } else
-            {
-                invader.transform.position -= new Vector3(i, 0, 0);
+                Color c = renderer.color;
+                c.a = i;
+                renderer.color = c;
+
+                //invader.transform.localScale -= new Vector3(i,i,0);
+
+                if (Swarm.Instance.isMovingRight)
+                {
+                    invader.transform.position += new Vector3(i, 0, 0);
+                }
+                else
+                {
+                    invader.transform.position -= new Vector3(i, 0, 0);
+                }
+                yield return new WaitForSeconds(0.05f);
             }
-            yield return new WaitForSeconds(0.05f);
         }
-
         invader.SetActive(false);
         yield return null;
     }

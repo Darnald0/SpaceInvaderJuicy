@@ -7,12 +7,14 @@ public class InputPolyManager : MonoBehaviour
     public PlayerController player;
     public GameObject ambientSFX;
     public EnemyBulletSpawner[] enemy;
+    public GameObject camera;
 
     private bool movementActive;
     private bool animActive;
     private bool sfxActive;
     private bool particleActive;
     private bool cameraActive;
+    private bool lightActive;
 
     private void Start()
     {
@@ -44,10 +46,18 @@ public class InputPolyManager : MonoBehaviour
             if (!animActive)
             {
                 player.activateAnim = true;
+                foreach (EnemyBulletSpawner enmy in enemy)
+                {
+                    enmy.activateAnim = true;
+                }
                 animActive = true;
             }
             else
             {
+                foreach (EnemyBulletSpawner enmy in enemy)
+                {
+                    enmy.activateAnim = false;
+                }
                 player.activateAnim = false;
                 animActive = false;
             }
@@ -118,6 +128,19 @@ public class InputPolyManager : MonoBehaviour
             {
                 cameraActive = false;
                 player.activeShake = false;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            if (!lightActive)
+            {
+                lightActive = true;
+                camera.SetActive(true);
+            }
+            else
+            {
+                lightActive = false;
+                camera.SetActive(false);
             }
         }
     }
