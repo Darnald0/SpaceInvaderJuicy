@@ -26,6 +26,14 @@ public class EnemyBulletSpawner : MonoBehaviour
     private float currentTime;
     [SerializeField] private Transform followTarget;
 
+    private AudioSource sourceSFX;
+    public bool activateSFX;
+
+    private void Start()
+    {
+        sourceSFX = GetComponent<AudioSource>();
+    }
+
     public void Update()
     {
         if (followTarget)
@@ -61,6 +69,7 @@ public class EnemyBulletSpawner : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+
         if (!other.collider.GetComponent<Bullet>())
         {
             return;
@@ -84,6 +93,10 @@ public class EnemyBulletSpawner : MonoBehaviour
 
         if (other.gameObject.tag == "Bullet")
         {
+            if (activateSFX)
+            {
+                sourceSFX.PlayOneShot(sourceSFX.clip);
+            }
             Destroy(other.gameObject);
         }
     }
