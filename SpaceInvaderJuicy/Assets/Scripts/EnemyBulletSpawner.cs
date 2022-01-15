@@ -66,6 +66,12 @@ public class EnemyBulletSpawner : MonoBehaviour
 
         timer = 0f;
         currentTime = Random.Range(minShootCD, maxShootCD);
+
+        if (transform.position.y <= Swarm.Instance.minY)
+        {
+            GameManager.Instance.TriggerGameOver();
+
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
