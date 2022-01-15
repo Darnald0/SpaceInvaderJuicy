@@ -66,6 +66,12 @@ public class EnemyBulletSpawner : MonoBehaviour
 
         timer = 0f;
         currentTime = Random.Range(minShootCD, maxShootCD);
+
+        if (transform.position.y <= Swarm.Instance.minY)
+        {
+            GameManager.Instance.TriggerGameOver();
+
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -82,6 +88,7 @@ public class EnemyBulletSpawner : MonoBehaviour
         //followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
         StartCoroutine(OnDeath(followTarget.gameObject));
         Swarm.Instance.currentNumberOfInvader--;
+        GameManager.Instance.AmbientLight.intensity = Mathf.Lerp(0.3f, 1, 1-(float)Swarm.Instance.currentNumberOfInvader/Swarm.Instance.totalNumberOfInvader);
         currentRow = currentRow - 1;
         if (currentRow < 0)
         {

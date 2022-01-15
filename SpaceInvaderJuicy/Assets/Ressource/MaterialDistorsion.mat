@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _CameraOpaqueTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 6ad600a1ca337844a9ded196e2a9eb1c, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -52,11 +56,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_cebf6d3adef3444e9dc74fe01d35b040: 1
+    - Vector1_cebf6d3adef3444e9dc74fe01d35b040: 0.001
     - _EnableExternalAlpha: 0
     m_Colors:
-    - Vector2_4a2038e9bb38403e86304479bf75271b: {r: 1, g: 1, b: 0, a: 0}
-    - Vector2_bf509333d408434a835a351c272b375f: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_4a2038e9bb38403e86304479bf75271b: {r: 0.025, g: 0, b: 0, a: 0}
+    - Vector2_bf509333d408434a835a351c272b375f: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
