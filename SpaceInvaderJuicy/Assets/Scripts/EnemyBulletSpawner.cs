@@ -86,18 +86,9 @@ public class EnemyBulletSpawner : MonoBehaviour
         Swarm.Instance.IncreaseDeathCount();
 
         //followTarget.GetComponentInChildren<SpriteRenderer>().enabled = false;
-        StartCoroutine(OnDeath(followTarget.gameObject));
         Swarm.Instance.currentNumberOfInvader--;
         GameManager.Instance.AmbientLight.intensity = Mathf.Lerp(0.3f, 1, 1-(float)Swarm.Instance.currentNumberOfInvader/Swarm.Instance.totalNumberOfInvader);
-        currentRow = currentRow - 1;
-        if (currentRow < 0)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            Setup();
-        }
+        StartCoroutine(OnDeath(followTarget.gameObject));
 
         if (other.gameObject.tag == "Bullet")
         {
@@ -140,7 +131,18 @@ public class EnemyBulletSpawner : MonoBehaviour
                 yield return new WaitForSeconds(0.05f);
             }
         }
+
         invader.SetActive(false);
+
+        currentRow = currentRow - 1;
+        if (currentRow < 0)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Setup();
+        }
         yield return null;
     }
 }

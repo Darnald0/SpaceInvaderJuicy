@@ -48,17 +48,19 @@ public class Swarm : MonoBehaviour
     [SerializeField]
     private float speedFactor = 10f;
 
-    [SerializeField]
-    private float acceleration = 0.5f;
+    //[SerializeField]
+    //private float acceleration = 0.5f;
 
-    [SerializeField]
-    private float accelerationFrequency = 10f;
+    //[SerializeField]
+    //private float accelerationFrequency = 10f;
 
-    [SerializeField]
-    private float movementFrequency = 5f;
+    //[SerializeField]
+    //private float movementFrequency = 5f;
 
-    [SerializeField]
-    private float minMovementFrequency = 0.1f;
+    //[SerializeField]
+    //private float minMovementFrequency = 0.1f;
+
+    [Space]
 
     [SerializeField]
     private Transform playerPos;
