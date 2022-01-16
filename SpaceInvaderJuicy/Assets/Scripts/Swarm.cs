@@ -48,33 +48,36 @@ public class Swarm : MonoBehaviour
     [SerializeField]
     private float speedFactor = 10f;
 
-    [SerializeField]
-    private float acceleration = 0.5f;
+    //[SerializeField]
+    //private float acceleration = 0.5f;
 
-    [SerializeField]
-    private float accelerationFrequency = 10f;
+    //[SerializeField]
+    //private float accelerationFrequency = 10f;
 
-    [SerializeField]
-    private float movementFrequency = 5f;
+    //[SerializeField]
+    //private float movementFrequency = 5f;
 
-    [SerializeField]
-    private float minMovementFrequency = 0.1f;
+    //[SerializeField]
+    //private float minMovementFrequency = 0.1f;
+
+    [Space]
 
     [SerializeField]
     private Transform playerPos;
 
-    private float minY;
+    [HideInInspector] public float minY;
     private float currentY;
     private Transform[,] invadersClassification;
     private int rowCount;
-    [HideInInspector]  public bool isMovingRight = true;
+    [HideInInspector] public bool isMovingRight = true;
     private float maxX;
     private float currentX;
     private float xIncrement;
+    private float yIncrement;
     [SerializeField]
     private float maxXIncrementation;
-    private float accelerationTimer;
-    private float movementTimer;
+    //private float accelerationTimer;
+    //private float movementTimer;
 
     [SerializeField]
     private EnemyBulletSpawner bulletSpawnerPrefab;
@@ -169,60 +172,90 @@ public class Swarm : MonoBehaviour
         }
 
         xIncrement = speedFactor;
-        accelerationTimer = accelerationFrequency;
-        movementTimer = movementFrequency;
+        //accelerationTimer = accelerationFrequency;
+        //movementTimer = movementFrequency;
         currentNumberOfInvader = totalNumberOfInvader;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //xIncrement = speedFactor * Time.deltaTime;
-        accelerationTimer -= Time.deltaTime;
-        if (accelerationTimer <= 0)
-        {
-            if (movementFrequency >= minMovementFrequency)
-            {
-                movementFrequency -= acceleration;
-                accelerationTimer = accelerationFrequency;
-            }
+        xIncrement = speedFactor * Time.deltaTime;
+        yIncrement = speedFactor * Time.deltaTime;
+        //accelerationTimer -= Time.deltaTime;
+        //if (accelerationTimer <= 0)
+        //{
+        //    if (movementFrequency >= minMovementFrequency)
+        //    {
+        //        movementFrequency -= acceleration;
+        //        accelerationTimer = accelerationFrequency;
+        //    }
 
-            if (movementFrequency <= minMovementFrequency)
-            {
-                movementFrequency = minMovementFrequency;
-            }
-        }
+        //    if (movementFrequency <= minMovementFrequency)
+        //    {
+        //        movementFrequency = minMovementFrequency;
+        //    }
+        //}
 
-        movementTimer -= Time.deltaTime;
-        if (movementTimer <= 0)
+        //movementTimer -= Time.deltaTime;
+        //if (movementTimer <= 0)
+        //{
+        if (isMovingRight)
         {
-            if (isMovingRight)
+            currentX += xIncrement;
+
+            if (currentX < maxX)
             {
-                currentX += xIncrement;
-                if (currentX < maxX)
+                MoveInvaders(xIncrement, 0);
+                if (currentX > maxX - speedFactor)
                 {
-                    MoveInvaders(xIncrement, 0);
-                }
-                else
-                {
-                    ChangeDirection();
+                    MoveInvaders(0, -yIncrement);
                 }
             }
             else
             {
-                currentX -= xIncrement;
-                if (currentX > minX)
+                var y = currentY - ySpacing;
+                if (y < currentY)
                 {
-                    MoveInvaders(-xIncrement, 0);
+                    isMovingRight = !isMovingRight;
                 }
-                else
+                currentY -= ySpacing;
+                if (currentY < minY)
                 {
-                    ChangeDirection();
+                }
+                //GoDown();
+            }
+        }
+        else
+        {
+
+            currentX -= xIncrement;
+            if (currentX > minX)
+            {
+                MoveInvaders(-xIncrement, 0);
+                if (currentX < minX + speedFactor)
+                {
+                    MoveInvaders(0, -yIncrement);
                 }
             }
-
-            movementTimer = movementFrequency;
+            else
+            {
+                var y = currentY - ySpacing;
+                if (y < currentY)
+                {
+                    isMovingRight = !isMovingRight;
+                }
+                currentY -= ySpacing;
+                if (currentY < minY)
+                {
+                    //GameManager.Instance.TriggerGameOver();
+                }
+                //GoDown();
+            }
         }
+
+        //movementTimer = movementFrequency;
+        //}
     }
 
     private void MoveInvaders(float x, float y)
@@ -233,18 +266,6 @@ public class Swarm : MonoBehaviour
             {
                 invadersClassification[i, j].Translate(x, y, 0);
             }
-        }
-    }
-
-    private void ChangeDirection()
-    {
-        isMovingRight = !isMovingRight;
-        MoveInvaders(0, -ySpacing);
-
-        currentY -= ySpacing;
-        if (currentY < minY)
-        {
-            GameManager.Instance.TriggerGameOver();
         }
     }
 
@@ -268,9 +289,11 @@ public class Swarm : MonoBehaviour
 
     public int GetPoints(string alienName)
     {
-        if (pointsMap.ContainsKey(alienName))
+        var fishName = alienName.Substring(0, alienName.Length - 7);
+
+        if (pointsMap.ContainsKey(fishName))
         {
-            return pointsMap[alienName];
+            return pointsMap[fishName];
         }
         return 0;
     }
