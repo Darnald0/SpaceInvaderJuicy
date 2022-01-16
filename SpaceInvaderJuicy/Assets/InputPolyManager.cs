@@ -10,6 +10,7 @@ public class InputPolyManager : MonoBehaviour
     public GameObject camera;
     public Camera camera1;
     public Camera camera2;
+    public GameObject Overlay;
 
     private bool movementActive;
     private bool animActive;
@@ -17,6 +18,7 @@ public class InputPolyManager : MonoBehaviour
     private bool particleActive;
     private bool cameraActive;
     private bool lightActive;
+    private bool overlayActive;
 
     private void Start()
     {
@@ -147,6 +149,19 @@ public class InputPolyManager : MonoBehaviour
                 camera.SetActive(false);
                 camera1.gameObject.SetActive(false);
                 camera2.gameObject.SetActive(true);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            if (!overlayActive)
+            {
+                overlayActive = true;
+                Overlay.gameObject.SetActive(true);
+            }
+            else
+            {
+                overlayActive = false;
+                Overlay.gameObject.SetActive(false);
             }
         }
     }
